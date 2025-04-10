@@ -1,0 +1,22 @@
+# app.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-todo-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-repo/kubernetes-manifests.git
+    targetRevision: HEAD
+    path: manifests
+    # For local testing, force image pull policy
+    helm:
+      parameters:
+        - name: image.pullPolicy
+          value: "Always"  # Always pull latest image
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default  # Use 'default' ns for simplicity in Docker Desktop
+  syncPolicy:
+    automated: {}
